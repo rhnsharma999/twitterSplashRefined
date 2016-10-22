@@ -11,6 +11,10 @@ import UIKit
 class ViewController: UIViewController,CAAnimationDelegate {
     
     
+    
+    var count = 0;
+    
+    
     @IBOutlet var mainView:UIView!
     @IBOutlet var overlay:UIView!
     var mask:CALayer!
@@ -20,8 +24,9 @@ class ViewController: UIViewController,CAAnimationDelegate {
         
         
         
-        var gesture = UITapGestureRecognizer(target: self, action: #selector(ViewController.initialize))
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(ViewController.initialize))
         self.view.addGestureRecognizer(gesture)
+        
         
         
         initialize()
@@ -32,10 +37,14 @@ class ViewController: UIViewController,CAAnimationDelegate {
     
     
     
-
+    
+  
     
     func initialize()
     {
+        
+        UIApplication.shared.isStatusBarHidden = true;
+        overlay.alpha = 1.0
         mask = CALayer()
         mask.contents = UIImage(named:"tw")?.cgImage
         
@@ -68,13 +77,23 @@ class ViewController: UIViewController,CAAnimationDelegate {
         animation.isRemovedOnCompletion = false;
         animation.fillMode = kCAFillModeForwards
         
-        mask.add(animation, forKey: "bounds")
+        mask.add(animation, forKey: "dec")
 
     }
     
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         
-        self.increaseAnim()
+        
+        if(anim == mask.animation(forKey: "dec"))
+        {
+            increaseAnim()
+        }
+        else{
+            UIApplication.shared.isStatusBarHidden = false;
+        }
+        
+            
+        
         
     }
     
@@ -85,29 +104,36 @@ class ViewController: UIViewController,CAAnimationDelegate {
         anim.duration = 0.5;
         anim.fromValue = NSValue(cgRect: self.mask.bounds)
         anim.toValue = NSValue(cgRect: CGRect(x: 0, y: 0, width: 2500, height: 2500))
+        anim.delegate = self;
+        
         
         // to stop it from removing
         
         anim.isRemovedOnCompletion = false;
         anim.fillMode = kCAFillModeForwards
         
-        mask.add(anim, forKey: "bounds")
+        mask.add(anim, forKey: "inc")
         
         UIView.animate(withDuration: 0.5, animations: {
+            
+            
+            
+            
+            self.overlay.alpha = 0.0
+            
+            
+            }, completion: { (my:Bool) in
         
         
-            
-            self.overlay.alpha = 0.0;
-            
+               
+
         })
         
     }
     
-    override var prefersStatusBarHidden: Bool
-        {
-        return true;
-        
-    }
+    
+    
+   
     
     
     
