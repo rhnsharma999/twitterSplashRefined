@@ -1,6 +1,9 @@
 
 # Twitter splash refined
 Implementation of the twitter splash screen using CABasicAnimation and image mask.
+
+![screenshot](https://raw.githubusercontent.com/rhnsharma999/twitterSplashRefined/master/Mar-27-2017%2018-50-00.gif)
+
 ## Usage
 download->build->run
 this is a `swift 3.0` project
